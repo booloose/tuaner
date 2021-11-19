@@ -1,18 +1,27 @@
 package club.tuaner.reqsplane.controller;
 
 
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import com.alibaba.nacos.api.config.annotation.NacosValue;
+import org.springframework.web.bind.annotation.*;
+
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RestController
 @RequestMapping("/api")
 public class ApiController {
 
-    @RequestMapping(value = "/test/{value}",method = RequestMethod.GET)
+    @NacosValue(value = "${useLocalCache:false}", autoRefreshed = true)
+    private boolean useLocalCache;
+
+    @RequestMapping(value = "/test/{value}",method = GET)
     public Object getHello(@PathVariable("value") String value){
         return "hello  "+value;
+    }
+
+    @RequestMapping(value = "/get", method = GET)
+    @ResponseBody
+    public boolean get() {
+        return useLocalCache;
     }
 
 }
